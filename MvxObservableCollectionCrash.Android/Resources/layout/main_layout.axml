@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" 
+    android:layout_width="match_parent" 
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        <Button
+            android:text="Start Modifications"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/button1"
+            local:MvxBind="Click StartCommand"/>
+        <Button
+            android:text="Stop Modifications"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/button2" 
+            local:MvxBind="Click StopCommand"/>
+    </LinearLayout>
+    
+    <MvvmCross.Droid.Support.V7.RecyclerView.MvxRecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recyclerview"
+        local:MvxItemTemplate="@layout/list_item"/>
+   
+</LinearLayout>
