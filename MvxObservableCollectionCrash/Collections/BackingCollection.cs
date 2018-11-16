@@ -3,12 +3,6 @@ using System.Collections.Generic;
 
 namespace MvxObservableCollectionCrash.Collections
 {
-    public enum IterationType
-    {
-        Continue,
-        Break
-    }
-
     public class BackingCollection<T> : InternalObservableCollection<T>
     {
         public BackingCollection() : base()

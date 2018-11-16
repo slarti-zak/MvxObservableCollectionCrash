@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 
@@ -13,7 +12,7 @@ namespace MvxObservableCollectionCrash.Collections
     /// </summary>
     public abstract class InternalObservableCollection<T> : INotifyCollectionChanged, INotifyPropertyChanged
     {
-        protected readonly ObservableCollection<T> _items;
+        protected readonly BatchObservableCollection<T> _items;
         protected readonly object _lock = new object();
 
         public event NotifyCollectionChangedEventHandler CollectionChanged
@@ -54,19 +53,19 @@ namespace MvxObservableCollectionCrash.Collections
 
         protected InternalObservableCollection()
         {
-            _items = new ObservableCollection<T>();
+            _items = new BatchObservableCollection<T>();
         }
 
         protected InternalObservableCollection(IEnumerable<T> initialData)
         {
-            _items = new ObservableCollection<T>(initialData);
+            _items = new BatchObservableCollection<T>(initialData);
         }
 
-        public void LockedAction(Action action)
+        public void LockedAction(Action<BatchObservableCollection<T>> action)
         {
             lock (_lock)
             {
-                action();
+                action(_items);
             }
         }
 
@@ -93,31 +92,6 @@ namespace MvxObservableCollectionCrash.Collections
                 lock (_lock)
                 {
                     return _items.Count;
-                }
-            }
-        }
-
-        public void Iterate(Action<T> iterator)
-        {
-            lock (_lock)
-            {
-                foreach (var item in _items)
-                {
-                    iterator(item);
-                }
-            }
-        }
-
-        public void Iterate(Func<T, IterationType> iterator)
-        {
-            lock (_lock)
-            {
-                foreach (var item in _items)
-                {
-                    if (iterator(item) == IterationType.Break)
-                    {
-                        break;
-                    }
                 }
             }
         }

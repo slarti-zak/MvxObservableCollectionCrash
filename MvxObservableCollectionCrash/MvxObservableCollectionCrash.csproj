@@ -20,4 +20,7 @@
     <Folder Include="ViewModels\" />
     <Folder Include="Collections\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Collections\IBatchObservableCollection.cs" />
+  </ItemGroup>
 </Project>

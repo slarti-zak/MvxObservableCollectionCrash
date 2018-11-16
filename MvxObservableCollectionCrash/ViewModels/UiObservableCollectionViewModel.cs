@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvxObservableCollectionCrash.Collections;
 
@@ -11,10 +12,17 @@ namespace MvxObservableCollectionCrash.ViewModels
         private readonly UiObservableCollection<ListItem> _uiCollection;
         public override ICollection Items => _uiCollection;
 
+        private IDisposable _uiSubscription;
+
         public UiObservableCollectionViewModel(IMvxMainThreadAsyncDispatcher dispatcher)
         {
             _uiCollection = new UiObservableCollection<ListItem>(dispatcher);
-            _uiCollection.Connect(_backingCollection);
+        }
+
+        public override async Task Initialize()
+        {
+            await base.Initialize().ConfigureAwait(false);
+            _uiSubscription = await _uiCollection.Connect(_backingCollection).ConfigureAwait(false);
         }
 
         protected override void InitializeCollection(int count)
@@ -29,7 +37,7 @@ namespace MvxObservableCollectionCrash.ViewModels
         {
             if (viewFinishing)
             {
-                _uiCollection.Dispose();
+                _uiSubscription?.Dispose();
             }
             base.ViewDestroy(viewFinishing);
         }
@@ -38,10 +46,10 @@ namespace MvxObservableCollectionCrash.ViewModels
         {
             for (var i = 0; i < count; i++)
             {
-                _backingCollection.LockedAction(() =>
+                _backingCollection.LockedAction(content =>
                 {
-                    var whereToRemove = random.Next(_backingCollection.Count);
-                    _backingCollection.RemoveAt(whereToRemove);
+                    var whereToRemove = random.Next(content.Count);
+                    content.RemoveAt(whereToRemove);
                 });
             }
         }
@@ -50,10 +58,10 @@ namespace MvxObservableCollectionCrash.ViewModels
         {
             for (var i = 0; i < count; i++)
             {
-                _backingCollection.LockedAction(() =>
+                _backingCollection.LockedAction(content =>
                 {
-                    var whereToAdd = random.Next(_backingCollection.Count + 1);
-                    _backingCollection.Insert(whereToAdd, CreateListItem());
+                    var whereToAdd = random.Next(content.Count + 1);
+                    content.Insert(whereToAdd, CreateListItem());
                 });
             }
         }
