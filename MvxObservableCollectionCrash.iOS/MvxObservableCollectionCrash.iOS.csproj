@@ -23,7 +23,7 @@
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
     <MtouchFastDev>true</MtouchFastDev>
     <IOSDebuggerPort>48976</IOSDebuggerPort>
-    <MtouchLink>None</MtouchLink>
+    <MtouchLink>SdkOnly</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <DeviceSpecificBuild>false</DeviceSpecificBuild>
@@ -86,7 +86,7 @@
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
     <Reference Include="MvvmCross">
-      <HintPath>..\packages\MvvmCross.6.2.1\lib\xamarinios10\MvvmCross.dll</HintPath>
+      <HintPath>..\packages\MvvmCross.6.2.2\lib\xamarinios10\MvvmCross.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -98,8 +98,9 @@
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
-    <InterfaceDefinition Include="MainViewController.storyboard" />
+    <InterfaceDefinition Include="CollectionViewController.storyboard" />
     <InterfaceDefinition Include="CrashTableViewCell.xib" />
+    <InterfaceDefinition Include="SelectionViewController.storyboard" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -109,14 +110,18 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="MainViewController.cs" />
-    <Compile Include="ViewController.designer.cs">
-      <DependentUpon>MainViewController.cs</DependentUpon>
+    <Compile Include="CollectionViewController.cs" />
+    <Compile Include="CollectionViewController.designer.cs">
+      <DependentUpon>CollectionViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="IOSSetup.cs" />
     <Compile Include="CrashTableViewCell.cs" />
     <Compile Include="CrashTableViewCell.designer.cs">
       <DependentUpon>CrashTableViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SelectionViewController.cs" />
+    <Compile Include="SelectionViewController.designer.cs">
+      <DependentUpon>SelectionViewController.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

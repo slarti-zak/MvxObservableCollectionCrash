@@ -1,12 +1,16 @@
-﻿namespace MvxObservableCollectionCrash.ViewModels
+﻿using System;
+
+namespace MvxObservableCollectionCrash.ViewModels
 {
-    public class ListItem
+    public class ListItem : IComparable<ListItem>
     {
-        public ListItem(string title)
+        public ListItem(long value)
         {
-            Title = title;
+            Value = value;
         }
 
-        public string Title { get; }
+        public long Value { get; }
+
+        public int CompareTo(ListItem other) => Value.CompareTo(other.Value);
     }
 }

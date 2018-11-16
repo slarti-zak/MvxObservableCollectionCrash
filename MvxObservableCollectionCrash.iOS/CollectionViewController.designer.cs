@@ -8,8 +8,8 @@ using Foundation;
 
 namespace MvxObservableCollectionCrash.iOS
 {
-    [Register("MainViewController")]
-    partial class MainViewController
+    [Register("CollectionViewController")]
+    partial class CollectionViewController
     {
         [Outlet]
         UIKit.UIButton StartButton { get; set; }

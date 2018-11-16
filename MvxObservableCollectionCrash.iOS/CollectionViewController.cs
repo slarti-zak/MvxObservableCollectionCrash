@@ -7,11 +7,11 @@ using MvxObservableCollectionCrash.ViewModels;
 
 namespace MvxObservableCollectionCrash.iOS
 {
-    [MvxFromStoryboard("MainViewController")]
-    [MvxRootPresentation(WrapInNavigationController = true)]
-    public partial class MainViewController : MvxViewController<MainViewModel>
+    [MvxFromStoryboard("CollectionViewController")]
+    [MvxChildPresentation]
+    public partial class CollectionViewController : MvxViewController<CollectionViewModel>
     {
-        protected MainViewController(IntPtr handle) : base(handle)
+        protected CollectionViewController(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
         }
@@ -24,7 +24,7 @@ namespace MvxObservableCollectionCrash.iOS
             Table.Source = tableSource;
             Table.RegisterNibForCellReuse(CrashTableViewCell.Nib, CrashTableViewCell.Key);
 
-            var set = this.CreateBindingSet<MainViewController, MainViewModel>();
+            var set = this.CreateBindingSet<CollectionViewController, CollectionViewModel>();
             set.Bind(StartButton)
                .To(vm => vm.StartCommand);
             set.Bind(StopButton)

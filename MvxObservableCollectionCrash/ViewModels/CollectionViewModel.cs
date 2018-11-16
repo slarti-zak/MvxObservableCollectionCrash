@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
@@ -6,9 +7,9 @@ using MvvmCross.ViewModels;
 
 namespace MvxObservableCollectionCrash.ViewModels
 {
-    public class MainViewModel : MvxViewModel
+    public abstract class CollectionViewModel : MvxViewModel
     {
-        public MvxObservableCollection<ListItem> Items { get; } = new MvxObservableCollection<ListItem>();
+        public abstract ICollection Items { get; }
 
         public MvxCommand StartCommand { get; }
         public MvxCommand StopCommand { get; }
@@ -22,23 +23,22 @@ namespace MvxObservableCollectionCrash.ViewModels
 
         private volatile bool _running = false;
 
-        public MainViewModel()
+        protected CollectionViewModel()
         {
-            StartCommand = new MvxCommand(Start);
-            StopCommand = new MvxCommand(Stop);
+            StartCommand = new MvxCommand(StartModifications);
+            StopCommand = new MvxCommand(StopModifications);
         }
 
         public override async Task Initialize()
         {
             await base.Initialize().ConfigureAwait(false);
 
-            for (int i = 0; i < _elementCount; i++)
-            {
-                Items.Add(CreateListItem());
-            }
+            InitializeCollection(_elementCount);
 
             Task.Run(ModifyItems, Cancellation);
         }
+
+        protected abstract void InitializeCollection(int count);
 
         public override void ViewDestroy(bool viewFinishing = true)
         {
@@ -49,46 +49,32 @@ namespace MvxObservableCollectionCrash.ViewModels
             base.ViewDestroy(viewFinishing);
         }
 
-        private void Start() { _running = true; }
-        private void Stop() { _running = false; }
+        private void StartModifications() { _running = true; }
+        private void StopModifications() { _running = false; }
 
         private async Task ModifyItems()
         {
             var random = new Random();
 
-            while (!_cancellationSource.IsCancellationRequested)
+            while (!Cancellation.IsCancellationRequested)
             {
                 if (_running)
                 {
-                    RemoveItems(random);
-                    AddItems(random);
+                    RemoveItems(random, _updateCount);
+                    AddItems(random, _updateCount);
                 }
                 await Task.Delay(TimeSpan.FromMilliseconds(50)).ConfigureAwait(false);
             }
         }
 
-        private void RemoveItems(Random random)
-        {
-            for (var i = 0; i < _updateCount; i++)
-            {
-                var whereToRemove = random.Next(Items.Count);
-                Items.RemoveAt(whereToRemove);
-            }
-        }
+        protected abstract void RemoveItems(Random random, int count);
 
-        private void AddItems(Random random)
-        {
-            for (var i = 0; i < _updateCount; i++)
-            {
-                var whereToAdd = random.Next(Items.Count + 1);
-                Items.Insert(whereToAdd, CreateListItem());
-            }
-        }
+        protected abstract void AddItems(Random random, int count);
 
-        private ListItem CreateListItem()
+        protected ListItem CreateListItem()
         {
             var count = Interlocked.Increment(ref _counter);
-            return new ListItem(count.ToString());
+            return new ListItem(count);
         }
     }
 }

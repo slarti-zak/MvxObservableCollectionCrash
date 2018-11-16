@@ -26,7 +26,7 @@ namespace MvxObservableCollectionCrash.iOS
         {
             var set = this.CreateBindingSet<CrashTableViewCell, ListItem>();
             set.Bind(CrashLabel)
-               .To(vm => vm.Title);
+               .To(vm => vm.Value);
             set.Apply();
         }
     }

@@ -9,7 +9,7 @@ namespace MvxObservableCollectionCrash
         {
             base.Initialize();
 
-            RegisterAppStart<MainViewModel>();
+            RegisterAppStart<SelectionViewModel>();
         }
     }
 }
